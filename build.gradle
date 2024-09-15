@@ -74,9 +74,16 @@ task cucumber() {
     dependsOn assemble, testClasses
     doLast {
         javaexec {
+			main = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
             args = ['--plugin', 'pretty', '--glue', 'com.challenges.price_finder.e2e', 'src/test/resources']
         }
     }
 }
+
+task allTests {
+    dependsOn test, cucumber
+}
+
+build.dependsOn allTests
 
