@@ -1,0 +1,82 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.3'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.challenges'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot starters
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// API documentation
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Database
+	runtimeOnly 'com.h2database:h2'
+
+	// Development tools
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Mapping and Annotation processors
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+	// Testing
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params'
+	testImplementation 'io.cucumber:cucumber-java:7.18.1'
+    testImplementation 'io.cucumber:cucumber-junit:7.18.1'
+    testImplementation 'io.cucumber:cucumber-spring:7.18.1'
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
+            args = ['--plugin', 'pretty', '--glue', 'com.challenges.price_finder.e2e', 'src/test/resources']
+        }
+    }
+}
+
