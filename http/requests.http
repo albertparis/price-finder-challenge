@@ -1,0 +1,9 @@
+@brandId = 1
+@productId = 35455
+@applicationDate = 2020-06-14T10:00:00.000Z
+@apiUrl = http://localhost:8080
+
+### Find price
+
+GET {{apiUrl}}/api/prices?brandId={{brandId}}&productId={{productId}}&applicationDate={{applicationDate}}
+Content-Type: application/json
