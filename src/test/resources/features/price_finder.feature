@@ -6,14 +6,15 @@ Feature: Price Finder API
     When I request the price for brand <brandId>, product <productId> at "<applicationDate>"
     Then the response status code should be <statusCode>
     And the response should contain the price details
+    And the price should be <expectedPrice>
 
     Examples:
-      | brandId | productId | applicationDate       | statusCode |
-      | 1       | 35455     | 2020-06-14T10:00:00   | 200        |
-      | 1       | 35455     | 2020-06-14T16:00:00   | 200        |
-      | 1       | 35455     | 2020-06-14T21:00:00   | 200        |
-      | 1       | 35455     | 2020-06-15T10:00:00   | 200        |
-      | 1       | 35455     | 2020-06-16T21:00:00   | 200        |
+      | brandId | productId | applicationDate       | statusCode | expectedPrice |
+      | 1       | 35455     | 2020-06-14T10:00:00   | 200        | 35.50         |
+      | 1       | 35455     | 2020-06-14T16:00:00   | 200        | 25.45         |
+      | 1       | 35455     | 2020-06-14T21:00:00   | 200        | 35.50         |
+      | 1       | 35455     | 2020-06-15T10:00:00   | 200        | 30.50         |
+      | 1       | 35455     | 2020-06-16T21:00:00   | 200        | 38.95         |
 
   Scenario: Get price for non-existent product
     Given the Price Finder API is available
